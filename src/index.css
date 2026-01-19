@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-300
+    focus:outline-none focus:ring-2 focus:ring-green-700
+    focus:border-green-700 transition;
+  }
+
+  .btn-green {
+    @apply bg-green-700 text-white py-3 rounded-xl font-black
+    hover:bg-green-800 transition cursor-pointer;
+  }
+}
+
+.obligatorio {
+  color: #f53333;
+  user-select: none;
+  margin-left: 0.1em;
+}
