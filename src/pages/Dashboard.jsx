@@ -26,25 +26,23 @@ export default function Dashboard() {
     init();
   }, [navigate]);
 
-async function remove(id) {
-  if (!confirm("¿Seguro que querés eliminar este producto?")) return;
+  async function remove(id) {
+    if (!confirm("¿Seguro que querés eliminar este producto?")) return;
 
-  const product = products.find((p) => p.id === id);
+    const product = products.find((p) => p.id === id);
 
-  if (product?.image) {
-    const url = new URL(product.image);
-    const path = url.pathname.split("/storage/v1/object/public/products/")[1];
-    if (path) await supabase.storage.from("products").remove([path]);
+    if (product?.image) {
+      const url = new URL(product.image);
+      const path = url.pathname.split("/storage/v1/object/public/products/")[1];
+      if (path) await supabase.storage.from("products").remove([path]);
+    }
+
+    const { error } = await supabase.from("products").delete().eq("id", id);
+    if (error) return alert(error.message);
+
+    const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+    setProducts(data || []);
   }
-
-  const { error } = await supabase.from("products").delete().eq("id", id);
-  if (error) return alert(error.message);
-
-  // recargar lista
-  const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
-  setProducts(data || []);
-}
-
 
   return (
     <main className="min-h-screen bg-linear-to-br from-gray-100 to-gray-200 p-10">

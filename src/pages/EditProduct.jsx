@@ -40,8 +40,15 @@ export default function EditProduct() {
     let imageUrl = product.image;
 
     if (file) {
-      const fileName = `${Date.now()}-${file.name}`;
+      if (product.image) {
+        const url = new URL(product.image);
+        const oldPath = url.pathname.split("/storage/v1/object/public/products/")[1];
+        if (oldPath) {
+          await supabase.storage.from("products").remove([oldPath]);
+        }
+      }
 
+      const fileName = `${Date.now()}-${file.name}`;
       const { error: uploadError } = await supabase.storage
         .from("products")
         .upload(fileName, file);
@@ -81,7 +88,6 @@ export default function EditProduct() {
   const remove = async () => {
     if (!confirm("¿Eliminar producto definitivamente?")) return;
 
-    // 1️⃣ Borrar imagen del bucket si existe
     if (product.image) {
       const url = new URL(product.image);
       const path = url.pathname.split("/storage/v1/object/public/products/")[1];
@@ -91,7 +97,6 @@ export default function EditProduct() {
       }
     }
 
-    // 2️⃣ Borrar producto de la base
     const { error } = await supabase.from("products").delete().eq("id", id);
 
     if (error) return alert(error.message);
