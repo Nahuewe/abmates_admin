@@ -205,6 +205,7 @@ export default function EditProduct() {
               <option value="">Sin insignia</option>
               <option value="new">Nuevo</option>
               <option value="limited">Últimos disponibles</option>
+              <option value="out_of_stock">Sin stock</option>
             </select>
           </div>
 
